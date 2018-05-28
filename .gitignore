@@ -4,3 +4,14 @@ build
 dist
 lib
 yarn.lock
+.idea/react-jsonschema-form.iml
+.idea/misc.xml
+.idea/markdown-navigator.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/codeStyles/codeStyleConfig.xml
+.idea/codeStyles/Project.xml
+package-lock.json
+.idea/markdown-navigator/profiles_settings.xml
+.idea/modules.xml

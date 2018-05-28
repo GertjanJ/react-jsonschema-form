@@ -436,6 +436,7 @@ class ArrayField extends Component {
       onFocus,
       registry = getDefaultRegistry(),
       rawErrors,
+      ...rest
     } = this.props;
     const items = this.props.formData;
     const { widgets, definitions, formContext } = registry;
@@ -461,6 +462,7 @@ class ArrayField extends Component {
         formContext={formContext}
         autofocus={autofocus}
         rawErrors={rawErrors}
+        {...rest}
       />
     );
   }
@@ -478,6 +480,7 @@ class ArrayField extends Component {
       onFocus,
       registry = getDefaultRegistry(),
       rawErrors,
+      ...rest
     } = this.props;
     const title = schema.title || name;
     const items = this.props.formData;
@@ -500,6 +503,7 @@ class ArrayField extends Component {
         formContext={formContext}
         autofocus={autofocus}
         rawErrors={rawErrors}
+        {...rest}
       />
     );
   }

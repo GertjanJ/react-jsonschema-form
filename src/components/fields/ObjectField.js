@@ -77,6 +77,7 @@ class ObjectField extends Component {
       onBlur,
       onFocus,
       registry = getDefaultRegistry(),
+      ...rest
     } = this.props;
     const { definitions, fields, formContext } = registry;
     const { SchemaField, TitleField, DescriptionField } = fields;
@@ -126,6 +127,7 @@ class ObjectField extends Component {
               registry={registry}
               disabled={disabled}
               readonly={readonly}
+              {...rest}
             />
           ),
           name,
