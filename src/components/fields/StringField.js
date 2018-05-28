@@ -37,8 +37,6 @@ function StringField(props) {
   const Widget = getWidget(schema, widget, widgets);
 
   return (
-    <div>
-      Test
     <Widget
       options={{ ...options, enumOptions }}
       schema={schema}
@@ -58,7 +56,6 @@ function StringField(props) {
       rawErrors={rawErrors}
       {...rest}
     />
-    </div>
   );
 }
 

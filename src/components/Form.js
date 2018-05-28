@@ -45,9 +45,11 @@ export default class Form extends Component {
     const { errors, errorSchema } = mustValidate
       ? this.validate(formData, schema)
       : {
-          errors: state.errors || [],
-          errorSchema: state.errorSchema || {},
-        };
+        errors: props.errorSchema
+          ? toErrorList(props.errorSchema)
+          : state.errors || [],
+        errorSchema: props.errorSchema || state.errorSchema || {},
+      };
     const idSchema = toIdSchema(
       retrievedSchema,
       uiSchema["ui:rootFieldId"],
@@ -70,16 +72,20 @@ export default class Form extends Component {
     return shouldRender(this, nextProps, nextState);
   }
 
-  validate(formData, schema = this.props.schema) {
+  validate(formData, schema) {
     const { validate, transformErrors } = this.props;
-    const { definitions } = this.getRegistry();
-    const resolvedSchema = retrieveSchema(schema, definitions, formData);
-    return validateFormData(
+    const { errors, errorSchema } = validateFormData(
       formData,
-      resolvedSchema,
+      schema || this.props.schema,
       validate,
       transformErrors
     );
+
+    if (this.props.onValidate) {
+      this.props.onValidate(errorSchema);
+    }
+
+    return { errors, errorSchema };
   }
 
   renderErrors() {
@@ -149,11 +155,10 @@ export default class Form extends Component {
       }
     }
 
-    setState(this, { errors: [], errorSchema: {} }, () => {
-      if (this.props.onSubmit) {
-        this.props.onSubmit({ ...this.state, status: "submitted" });
-      }
-    });
+    if (this.props.onSubmit) {
+      this.props.onSubmit({ ...this.state, status: "submitted" });
+    }
+    this.setState({ errors: [], errorSchema: {} });
   };
 
   getRegistry() {
@@ -176,7 +181,6 @@ export default class Form extends Component {
       children,
       safeRenderCompletion,
       id,
-      idPrefix,
       className,
       name,
       method,
@@ -211,7 +215,6 @@ export default class Form extends Component {
           uiSchema={uiSchema}
           errorSchema={errorSchema}
           idSchema={idSchema}
-          idPrefix={idPrefix}
           formData={formData}
           onChange={this.onChange}
           onBlur={this.onBlur}
@@ -237,6 +240,7 @@ if (process.env.NODE_ENV !== "production") {
   Form.propTypes = {
     schema: PropTypes.object.isRequired,
     uiSchema: PropTypes.object,
+    errorSchema: PropTypes.object,
     formData: PropTypes.any,
     widgets: PropTypes.objectOf(
       PropTypes.oneOfType([PropTypes.func, PropTypes.object])
@@ -248,6 +252,7 @@ if (process.env.NODE_ENV !== "production") {
     ErrorList: PropTypes.func,
     onChange: PropTypes.func,
     onError: PropTypes.func,
+    onValidate: PropTypes.func,
     showErrorList: PropTypes.bool,
     onSubmit: PropTypes.func,
     id: PropTypes.string,
